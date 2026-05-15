@@ -19,8 +19,15 @@ class ProductGroup(Base):
     # Self-referential relationship for tree hierarchy
     children = relationship(
         "ProductGroup",
-        backref="parent",
+        back_populates="parent",
         foreign_keys=[parent_id],
+        lazy="selectin",
+    )
+    parent = relationship(
+        "ProductGroup",
+        back_populates="children",
+        foreign_keys=[parent_id],
+        remote_side="ProductGroup.id",
         lazy="selectin",
     )
     products = relationship("Product", back_populates="group")
